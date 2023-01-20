@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import Calculator from './Calculator'
 
 type CalculateSubmitForm = {
   cartValue: number
@@ -19,6 +20,7 @@ type CalculateSubmitForm = {
 }
 
 const App: React.FC = () => {
+  const [deliverFee, setDeliverFee] = useState(0)
   const validationSchema = Yup.object().shape({
     cartValue: Yup.string().required('Cart value is required'),
     distance: Yup.string().required('Delivery distance is required'),
@@ -36,31 +38,20 @@ const App: React.FC = () => {
 
     if (cartValue < 10) {
       fee += 10 - cartValue
-      console.log('cartValue < 10, fee: ', fee)
     }
 
     fee += 2
-    console.log('fee += 2, fee: ', fee)
 
     if (distance > 1000) {
-      console.log('distance > 1000, fee now: ', fee)
       fee += Math.ceil((distance - 1000) / 500)
-      console.log(
-        'distance > 1000, fee += Math.ceil((distance - 1000) / 500): ',
-        fee,
-      )
     }
 
     if (itemCount >= 5) {
-      console.log('itemCount >= 5,fee now: ', fee)
       fee += (itemCount - 4) * 0.5
-      console.log('itemCount >= 5, fee += (itemCount - 4) * 0.5: ', fee)
-    }
 
-    if (itemCount > 12) {
-      console.log('itemCount > 12, fee now: ', fee)
-      fee += 1.2
-      console.log('itemCount > 12, fee += 1.2: ', fee)
+      if (itemCount > 12) {
+        fee += 1.2
+      }
     }
 
     if (
@@ -69,7 +60,6 @@ const App: React.FC = () => {
       time.getUTCDay() === 5
     ) {
       console.log('time.getUTCHours() ', time.getUTCHours())
-
       fee *= 1.2
       console.log('Friday 15-19: ')
     }
@@ -90,7 +80,18 @@ const App: React.FC = () => {
     const { cartValue, distance, itemCount, time } = data
 
     const dateTime = new Date(Number(time))
-    calculateDeliveryFee(cartValue, itemCount, distance, dateTime)
+    console.log(dateTime.getUTCDay())
+    console.log(dateTime.getUTCHours())
+
+    // calculateDeliveryFee(cartValue, itemCount, distance, dateTime)
+    const fee = new Calculator(
+      cartValue,
+      itemCount,
+      distance,
+      dateTime,
+    ).getDeliverFee()
+    console.log('fee', fee)
+    setDeliverFee(fee)
   }
 
   const {
@@ -113,6 +114,7 @@ const App: React.FC = () => {
           <label>Cart value</label>
           <input
             type="number"
+            step="0.01"
             placeholder="20€"
             {...register('cartValue')}
             className={`form-control ${errors.cartValue ? 'is-invalid' : ''}`}
@@ -184,9 +186,7 @@ const App: React.FC = () => {
         >
           Clear inputs
         </button>
-        <div>
-          <input type="text" />
-        </div>
+        <div>{deliverFee !== 0 && <h3>Deliver Fee: {deliverFee}</h3>}</div>
       </form>
     </div>
   )
