@@ -5,33 +5,92 @@ import Button from 'react-bootstrap/Button'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import ReactDatePicker from 'react-datepicker'
+
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-import DateController from './DateController'
-
 type CalculateSubmitForm = {
   cartValue: number
-  deliveryDistance: number
-  numberOfItems: number
+  distance: number
+  itemCount: number
   time: number
 }
 
 const App: React.FC = () => {
   const validationSchema = Yup.object().shape({
     cartValue: Yup.string().required('Cart value is required'),
-    deliveryDistance: Yup.string().required('Delivery distance is required'),
-    numberOfItems: Yup.string().required('Number of items is required'),
+    distance: Yup.string().required('Delivery distance is required'),
+    itemCount: Yup.string().required('Number of items is required'),
     time: Yup.string().required('Delivery time is required'),
   })
 
+  const calculateDeliveryFee = (
+    cartValue: number,
+    itemCount: number,
+    distance: number,
+    time: Date,
+  ) => {
+    let fee = 0
+
+    if (cartValue < 10) {
+      fee += 10 - cartValue
+      console.log('cartValue < 10, fee: ', fee)
+    }
+
+    fee += 2
+    console.log('fee += 2, fee: ', fee)
+
+    if (distance > 1000) {
+      console.log('distance > 1000, fee now: ', fee)
+      fee += Math.ceil((distance - 1000) / 500)
+      console.log(
+        'distance > 1000, fee += Math.ceil((distance - 1000) / 500): ',
+        fee,
+      )
+    }
+
+    if (itemCount >= 5) {
+      console.log('itemCount >= 5,fee now: ', fee)
+      fee += (itemCount - 4) * 0.5
+      console.log('itemCount >= 5, fee += (itemCount - 4) * 0.5: ', fee)
+    }
+
+    if (itemCount > 12) {
+      console.log('itemCount > 12, fee now: ', fee)
+      fee += 1.2
+      console.log('itemCount > 12, fee += 1.2: ', fee)
+    }
+
+    if (
+      time.getUTCHours() >= 15 &&
+      time.getUTCHours() <= 19 &&
+      time.getUTCDay() === 5
+    ) {
+      console.log('time.getUTCHours() ', time.getUTCHours())
+
+      fee *= 1.2
+      console.log('Friday 15-19: ')
+    }
+    if (fee > 15) {
+      fee = 15
+    }
+
+    if (cartValue >= 100) {
+      fee = 0
+    }
+    console.log('fee: ', fee)
+
+    return fee
+  }
+
   const onSubmit = (data: CalculateSubmitForm) => {
-    console.log('form submit')
     console.log('data: ', data)
-    console.log(new Date(Number(data.time)).toISOString())
+    const { cartValue, distance, itemCount, time } = data
+
+    const dateTime = new Date(Number(time))
+    calculateDeliveryFee(cartValue, itemCount, distance, dateTime)
   }
 
   const {
@@ -48,11 +107,13 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
+      <h1>Delivery Fee Calculator</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <label>Cart value</label>
           <input
-            type="text"
+            type="number"
+            placeholder="20€"
             {...register('cartValue')}
             className={`form-control ${errors.cartValue ? 'is-invalid' : ''}`}
           />
@@ -62,34 +123,26 @@ const App: React.FC = () => {
         <div className="form-group">
           <label>Delivery distance</label>
           <input
-            type="text"
-            {...register('deliveryDistance')}
-            className={`form-control ${
-              errors.deliveryDistance ? 'is-invalid' : ''
-            }`}
+            type="number"
+            placeholder="900m"
+            {...register('distance')}
+            className={`form-control ${errors.distance ? 'is-invalid' : ''}`}
           />
-          <div className="invalid-feedback">
-            {errors.deliveryDistance?.message}
-          </div>
+          <div className="invalid-feedback">{errors.distance?.message}</div>
         </div>
 
         <div className="form-group">
           <label>Number of items</label>
           <input
-            type="text"
-            {...register('numberOfItems')}
-            className={`form-control ${
-              errors.numberOfItems ? 'is-invalid' : ''
-            }`}
+            type="number"
+            {...register('itemCount')}
+            className={`form-control ${errors.itemCount ? 'is-invalid' : ''}`}
           />
-          <div className="invalid-feedback">
-            {errors.numberOfItems?.message}
-          </div>
+          <div className="invalid-feedback">{errors.itemCount?.message}</div>
         </div>
 
-        <div className="form-group">
+        <div>
           <label>Time</label>
-
           <Controller
             render={(ref) => (
               <DatePicker
@@ -100,14 +153,14 @@ const App: React.FC = () => {
                     : undefined
                 }
                 onChange={(date: Date) => ref.field.onChange(date.getTime())}
-                dateFormat={'MMMM d, yyyy hh:mm'}
+                // dateFormat={'MMMM d, yyyy hh:mm'}
                 placeholderText="Select"
                 showTimeSelect={true}
                 showTimeInput
                 customTimeInput={
                   <input
                     className={`form-control ${
-                      errors.numberOfItems ? 'is-invalid' : ''
+                      errors.time ? 'is-invalid' : ''
                     }`}
                   />
                 }
@@ -120,8 +173,9 @@ const App: React.FC = () => {
 
           <div className="invalid-feedback">{errors.time?.message}</div>
         </div>
+
         <Button variant="primary" type="submit">
-          Submit
+          Calculate delivery price
         </Button>
         <button
           type="button"
@@ -130,6 +184,9 @@ const App: React.FC = () => {
         >
           Clear inputs
         </button>
+        <div>
+          <input type="text" />
+        </div>
       </form>
     </div>
   )
