@@ -1,15 +1,10 @@
 import React, { useState } from 'react'
-
 import Button from 'react-bootstrap/Button'
-
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from 'react-datepicker'
-
-import 'react-datepicker/dist/react-datepicker.css'
 import Calculator from './Calculator'
 
 type CalculateSubmitForm = {
@@ -21,6 +16,7 @@ type CalculateSubmitForm = {
 
 const App: React.FC = () => {
   const [deliverFee, setDeliverFee] = useState(0)
+
   const validationSchema = Yup.object().shape({
     cartValue: Yup.string().required('Cart value is required'),
     distance: Yup.string().required('Delivery distance is required'),
@@ -28,69 +24,19 @@ const App: React.FC = () => {
     time: Yup.string().required('Delivery time is required'),
   })
 
-  const calculateDeliveryFee = (
-    cartValue: number,
-    itemCount: number,
-    distance: number,
-    time: Date,
-  ) => {
-    let fee = 0
-
-    if (cartValue < 10) {
-      fee += 10 - cartValue
-    }
-
-    fee += 2
-
-    if (distance > 1000) {
-      fee += Math.ceil((distance - 1000) / 500)
-    }
-
-    if (itemCount >= 5) {
-      fee += (itemCount - 4) * 0.5
-
-      if (itemCount > 12) {
-        fee += 1.2
-      }
-    }
-
-    if (
-      time.getUTCHours() >= 15 &&
-      time.getUTCHours() <= 19 &&
-      time.getUTCDay() === 5
-    ) {
-      console.log('time.getUTCHours() ', time.getUTCHours())
-      fee *= 1.2
-      console.log('Friday 15-19: ')
-    }
-    if (fee > 15) {
-      fee = 15
-    }
-
-    if (cartValue >= 100) {
-      fee = 0
-    }
-    console.log('fee: ', fee)
-
-    return fee
-  }
-
   const onSubmit = (data: CalculateSubmitForm) => {
     console.log('data: ', data)
     const { cartValue, distance, itemCount, time } = data
-
     const dateTime = new Date(Number(time))
-    console.log(dateTime.getUTCDay())
-    console.log(dateTime.getUTCHours())
-
     // calculateDeliveryFee(cartValue, itemCount, distance, dateTime)
     const fee = new Calculator(
       cartValue,
-      itemCount,
       distance,
+      itemCount,
       dateTime,
     ).getDeliverFee()
     console.log('fee', fee)
+
     setDeliverFee(fee)
   }
 
@@ -186,7 +132,7 @@ const App: React.FC = () => {
         >
           Clear inputs
         </button>
-        <div>{deliverFee !== 0 && <h3>Deliver Fee: {deliverFee}</h3>}</div>
+        <h3>Deliver Fee: {deliverFee}</h3>
       </form>
     </div>
   )
