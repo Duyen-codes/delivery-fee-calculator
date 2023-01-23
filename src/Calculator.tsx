@@ -30,20 +30,13 @@ class Calculator {
     console.log('this.fee: ', this.fee)
   }
 
-  baseFee() {
-    console.log('baseFee...')
-    this.fee += 2
-    console.log('this.fee: ', this.fee)
-  }
-
   // Distance fee
   calculateDeliverDistanceFee() {
     console.log('calculateDeliverDistanceFee...')
     console.log('this.fee: ', this.fee)
     if (this.distance <= 1000) {
       this.fee += 2
-    }
-    if (this.distance > 1000) {
+    } else if (this.distance > 1000) {
       console.log('this.distance > 1000')
       this.fee += 2 + Math.ceil((this.distance - 1000) / 500)
     }
@@ -67,6 +60,7 @@ class Calculator {
   // Friday rush surcharge
   applyFridayRushSurcharge() {
     console.log('applyFridayRushSurcharge...')
+    console.log('this.time: ', this.time)
     if (
       this.time.getUTCHours() >= 13 &&
       this.time.getUTCHours() <= 17 &&
@@ -97,7 +91,6 @@ class Calculator {
 
   getDeliverFee() {
     this.calculateOrderSurcharge()
-    this.baseFee()
     this.calculateDeliverDistanceFee()
     this.calculateItemCountSurcharge()
     this.applyFridayRushSurcharge()
