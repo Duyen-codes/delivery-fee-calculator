@@ -89,7 +89,7 @@ const FeeCalculatorForm: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="distance" className="form-label">
-            Deliver distance
+            Delivery distance
           </label>
           <div className="input-group">
             <span className="input-group-text">$</span>
@@ -128,7 +128,7 @@ const FeeCalculatorForm: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="time" className="form-label">
-            Time
+            Delivery time
           </label>
 
           <Controller
@@ -179,13 +179,12 @@ const FeeCalculatorForm: React.FC = () => {
           </div>
         </div>
         <div
-          className="p-2"
           style={{
             backgroundColor: 'hsl(183, 100%, 15%)',
             color: 'hsl(172, 67%, 45%)',
           }}
         >
-          <p className="display-6 text-center">
+          <p className="display-6 text-center p-2">
             Delivery Fee: €{deliverFee.toFixed(2)}
           </p>
         </div>
