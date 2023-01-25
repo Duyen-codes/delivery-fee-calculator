@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import FeeCalculatorForm from './components/FeeCalculatorForm'
 
 const App: React.FC = () => {

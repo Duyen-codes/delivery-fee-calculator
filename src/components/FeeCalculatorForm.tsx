@@ -17,8 +17,6 @@ type CalculateSubmitForm = {
 const FeeCalculatorForm: React.FC = () => {
   const [deliverFee, setDeliverFee] = useState<number>(0)
 
-  const { formState } = useForm()
-
   const validationSchema = Yup.object().shape({
     cartValue: Yup.string().required('Cart value is required'),
     distance: Yup.string().required('Delivery distance is required'),
