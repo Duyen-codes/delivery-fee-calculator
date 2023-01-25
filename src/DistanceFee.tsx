@@ -5,7 +5,6 @@ class DistanceFee {
     this.distance = distance
     this.fee = fee
   }
-
   calculate() {
     console.log('calculateDeliverDistanceFee...')
     if (this.distance <= 1000) {
