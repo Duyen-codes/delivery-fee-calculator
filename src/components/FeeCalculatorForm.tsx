@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-// import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from 'react-datepicker'
 import Calculator from '../Calculator'
 
@@ -17,37 +17,28 @@ type CalculateSubmitForm = {
 const FeeCalculatorForm: React.FC = () => {
   const [deliverFee, setDeliverFee] = useState<number>(0)
 
+  const { formState } = useForm()
+
   const validationSchema = Yup.object().shape({
     cartValue: Yup.string().required('Cart value is required'),
     distance: Yup.string().required('Delivery distance is required'),
     itemCount: Yup.string().required('Number of items is required'),
     time: Yup.string().required('Delivery time is required'),
   })
-  //   console.log(new Calculator(10, 1499, 3, new Date()).getDeliverFee()) // 3
-  //   console.log(new Calculator(110, 1501, 13, new Date()).getDeliverFee()) // 0
-  //   console.log(
-  //     new Calculator(
-  //       50,
-  //       2000,
-  //       20,
-  //       new Date('2022-12-16T18:00:00'),
-  //     ).getDeliverFee(),
-  //   ) // 15
 
   const onSubmit = (data: CalculateSubmitForm) => {
     console.log('form submit')
-
     console.log('data: ', data)
     const { cartValue, distance, itemCount, time } = data
     const dateTime = new Date(Number(time))
-    // calculateDeliveryFee(cartValue, itemCount, distance, dateTime)
+
     const fee = new Calculator(
       cartValue,
       distance,
       itemCount,
       dateTime,
     ).getDeliverFee()
-    console.log('fee', fee)
+
     setDeliverFee(fee)
   }
 
@@ -63,74 +54,90 @@ const FeeCalculatorForm: React.FC = () => {
     resolver: yupResolver(validationSchema),
   })
 
-  console.log('deliverFee', deliverFee)
+  const clearInputs = () => {
+    reset()
+    setDeliverFee(0)
+  }
 
   return (
-    <div className="container-sm">
-      <h1>Delivery Fee Calculator</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div style={{ maxWidth: '768px' }}>
+      <h5 className="display-5 text-center mb-5">Delivery Fee Calculator</h5>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="row g-3 border rounded-top shadow p-3 bg-white"
+      >
         <div className="form-group">
-          <label htmlFor="cartValue">Cart value</label>
-          {/* <Controller
-            render={({ field }) => (
-              <input
-                {...field}
-                className={`form-control ${
-                  errors.cartValue ? 'is-invalid' : ''
-                }`}
-                placeholder="20"
-                id="cartValue"
-              />
-            )}
-            name="cartValue"
-            control={control}
-          /> */}
-          <input
-            type="number"
-            min={0}
-            step="0.01"
-            placeholder="20"
-            {...register('cartValue')}
-            className={`form-control ${errors.cartValue ? 'is-invalid' : ''}`}
-            id="cartValue"
-          />
-          <div className="invalid-feedback">{errors.cartValue?.message}</div>
+          <label htmlFor="cartValue" className="form-label">
+            Cart value
+          </label>
+          <div className="input-group">
+            <input
+              type="number"
+              min="1"
+              step="0.01"
+              placeholder="20"
+              {...register('cartValue')}
+              className={`form-control form-control-lg ${
+                errors.cartValue ? 'is-invalid' : ''
+              }`}
+              id="cartValue"
+            />
+            <span className="input-group-text">€</span>
+            <div className="invalid-feedback">{errors.cartValue?.message}</div>
+          </div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="distance">Deliver distance</label>
-          <input
-            id="distance"
-            type="number"
-            min={0}
-            placeholder="900"
-            {...register('distance')}
-            className={`form-control ${errors.distance ? 'is-invalid' : ''}`}
-          />
-          <div className="invalid-feedback">{errors.distance?.message}</div>
+          <label htmlFor="distance" className="form-label">
+            Deliver distance
+          </label>
+          <div className="input-group">
+            <span className="input-group-text">$</span>
+            <input
+              id="distance"
+              type="number"
+              min="1"
+              placeholder="900"
+              {...register('distance')}
+              className={`form-control form-control-lg ${
+                errors.distance ? 'is-invalid' : ''
+              }`}
+            />
+            <span className="input-group-text">m</span>
+
+            <div className="invalid-feedback">{errors.distance?.message}</div>
+          </div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="itemCount">Number of items</label>
+          <label htmlFor="itemCount" className="form-label">
+            Number of items
+          </label>
           <input
             id="itemCount"
             type="number"
             min={0}
             {...register('itemCount')}
-            className={`form-control ${errors.itemCount ? 'is-invalid' : ''}`}
+            className={`form-control form-control-lg ${
+              errors.itemCount ? 'is-invalid' : ''
+            }`}
             placeholder="4"
           />
           <div className="invalid-feedback">{errors.itemCount?.message}</div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="time">Time</label>
+          <label htmlFor="time" className="form-label">
+            Time
+          </label>
 
           <Controller
             render={(ref) => (
               <DatePicker
                 id="time"
-                className={`form-control ${errors.time ? 'is-invalid' : ''}`}
+                className={`form-control form-control-lg ${
+                  errors.time ? 'is-invalid' : ''
+                }`}
                 {...register('time')}
                 selected={
                   ref.field.value
@@ -148,22 +155,41 @@ const FeeCalculatorForm: React.FC = () => {
             name={'time'}
             control={control}
             rules={{ required: true }}
-          ></Controller>
-          <div className="invalid-feedback">{errors.time?.message}</div>
-        </div>
+          />
 
-        <Button type="submit" style={{ margin: '4rem' }}>
-          Calculate delivery price
-        </Button>
-        <Button
-          type="button"
-          onClick={() => reset()}
-          className="btn btn-warning float-right"
+          <div className="invalid-feedback" style={{ display: 'block' }}>
+            {errors.time?.message}
+          </div>
+        </div>
+        <div className="row g-3 mb-3">
+          <div className="col-auto">
+            <Button type="submit" className="btn btn-info btn-lg text-white">
+              Calculate delivery price
+            </Button>
+          </div>
+          <div className="col-auto">
+            <Button
+              type="button"
+              //   onClick={() => reset()}
+              onClick={clearInputs}
+              className="btn btn-warning btn-lg"
+            >
+              Clear inputs
+            </Button>
+          </div>
+        </div>
+        <div
+          className="p-2"
+          style={{
+            backgroundColor: 'hsl(183, 100%, 15%)',
+            color: 'hsl(172, 67%, 45%)',
+          }}
         >
-          Clear inputs
-        </Button>
+          <p className="display-6 text-center">
+            Delivery Fee: €{deliverFee.toFixed(2)}
+          </p>
+        </div>
       </form>
-      <h3>Deliver Fee: {deliverFee.toFixed(2)}</h3>
     </div>
   )
 }

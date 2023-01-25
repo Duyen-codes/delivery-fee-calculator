@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import FeeCalculatorForm from './components/FeeCalculatorForm'
 
 const App: React.FC = () => {
-  const [deliverFee, setDeliverFee] = useState(0)
-
   return (
-    <div className="App">
+    <div
+      className="App row justify-content-center align-items-center"
+      style={{ minHeight: '100vh' }}
+    >
       <FeeCalculatorForm />
     </div>
   )
