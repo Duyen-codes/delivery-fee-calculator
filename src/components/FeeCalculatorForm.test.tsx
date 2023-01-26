@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { act } from 'react-dom/test-utils'
 import Calculator from '../Calculator'
 import FeeCalculatorForm from './FeeCalculatorForm'
 
@@ -26,8 +27,7 @@ describe('FeeCalculatorForm', () => {
   })
 
   test('submits the form correctly', async () => {
-    let calculator: Calculator
-    let setDeliverFee = jest.fn()
+    const spy = jest.spyOn(Calculator.prototype, 'calculateDeliverFee')
 
     const { getByLabelText, getByText } = render(<FeeCalculatorForm />)
 
@@ -43,27 +43,23 @@ describe('FeeCalculatorForm', () => {
     const itemCountInput = getByLabelText(/number of items/i)
     const timeInput = getByLabelText(/delivery time/i)
 
-    // fill in the form inputs
-    fireEvent.change(cartValueInput, { target: { value: data.cartValue } })
-    fireEvent.change(distanceInput, { target: { value: data.distance } })
-    fireEvent.change(itemCountInput, { target: { value: data.itemCount } })
-    fireEvent.change(timeInput, {
-      target: { value: data.time },
-    })
-
-    calculator = new Calculator(
-      data.cartValue,
-      data.distance,
-      data.itemCount,
-      data.time,
-    )
-
     const calculateButton = getByText(/Calculate delivery price/i)
-    fireEvent.click(calculateButton)
 
-    await waitFor(() => {
-      expect(getByText(/Delivery fee: €5.00/i)).toBeInTheDocument()
+    // fill in the form inputs
+    await act(async () => {
+      {
+        fireEvent.change(cartValueInput, { target: { value: data.cartValue } })
+        fireEvent.change(distanceInput, { target: { value: data.distance } })
+        fireEvent.change(itemCountInput, { target: { value: data.itemCount } })
+        fireEvent.change(timeInput, {
+          target: { value: data.time },
+        })
+        fireEvent.click(calculateButton)
+      }
     })
+
+    expect(getByText(/Delivery fee: €5.00/i)).toBeInTheDocument()
+    expect(spy).toHaveBeenCalled()
   })
 
   test('form displays validation error messages when the required fields are left empty', () => {

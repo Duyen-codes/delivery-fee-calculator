@@ -25,7 +25,7 @@ class Calculator {
     this.time = time
   }
 
-  getDeliverFee(): number {
+  calculateDeliverFee(): number {
     const orderSurcharge = new OrderSurcharge(this.cartValue, this.fee)
     this.fee = orderSurcharge.calculate()
     const distanceFee = new DistanceFee(this.distance, this.fee)
