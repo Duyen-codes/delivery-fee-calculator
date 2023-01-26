@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from 'react-dom/test-utils'
-import Calculator from '../Calculator'
+import Calculator from '../utils/Calculator'
 import FeeCalculatorForm from './FeeCalculatorForm'
 
 describe('FeeCalculatorForm', () => {
@@ -79,5 +79,43 @@ describe('FeeCalculatorForm', () => {
     expect(timeError).toBeInTheDocument()
   })
 
-  test('test form correctly resets the input values and delivery fee when clear inputs buttton is clicked', () => {})
+  describe('ClearInputs', () => {
+    test.only('should reset the form inputs and set the deliverFee to 0', async () => {
+      const { getByText, getByLabelText } = render(<FeeCalculatorForm />)
+
+      const data = {
+        cartValue: 20,
+        distance: 1500,
+        itemCount: 8,
+        time: new Date('2023-01-24T11:00:00Z'),
+      }
+
+      const cartValueInput = getByLabelText(/cart value/i)
+
+      screen.debug(cartValueInput)
+      const distanceInput = getByLabelText(/delivery distance/i)
+      const itemCountInput = getByLabelText(/number of items/i)
+      const timeInput = getByLabelText(/delivery time/i)
+
+      const clearButton = getByText(/Clear inputs/i)
+
+      // fill in the form inputs
+      await act(async () => {
+        {
+          fireEvent.change(cartValueInput, {
+            target: { value: data.cartValue },
+          })
+          fireEvent.change(distanceInput, { target: { value: data.distance } })
+          fireEvent.change(itemCountInput, {
+            target: { value: data.itemCount },
+          })
+          fireEvent.change(timeInput, {
+            target: { value: data.time },
+          })
+
+          fireEvent.click(clearButton)
+        }
+      })
+    })
+  })
 })
