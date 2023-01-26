@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-// import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from 'react-datepicker'
 import Calculator from '../utils/Calculator'
 
@@ -170,19 +169,19 @@ const FeeCalculatorForm: React.FC = () => {
         </div>
         <div className="row g-3 mb-3">
           <div className="col-auto">
-            <Button type="submit" className="btn btn-info btn-lg text-white">
+            <button type="submit" className="btn btn-info btn-lg text-white">
               Calculate delivery price
-            </Button>
+            </button>
           </div>
           <div className="col-auto">
-            <Button
+            <button
               type="button"
               //   onClick={() => reset()}
               onClick={clearInputs}
               className="btn btn-warning btn-lg"
             >
               Clear inputs
-            </Button>
+            </button>
           </div>
         </div>
         <div
