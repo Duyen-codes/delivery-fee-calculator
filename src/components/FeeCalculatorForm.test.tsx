@@ -63,22 +63,20 @@ describe('FeeCalculatorForm', () => {
   })
 
   test('form displays validation error messages when the required fields are left empty', () => {
-    const { container } = render(<FeeCalculatorForm />)
+    const { getByText, container } = render(<FeeCalculatorForm />)
 
-    const cartValueError = container.querySelector('.invalid-feedback')
-
-    const calculateButton = screen.getByText(/calculate/i)
+    const calculateButton = getByText(/Calculate delivery price/i)
     fireEvent.click(calculateButton)
 
-    // // const cartValueError = screen.getByText(/cart value is required/i)
-    // const distanceError = screen.getByText(/delivery distance is required/i)
-    // const itemCountError = screen.getByText(/number of items is required/i)
-    // const timeError = screen.getByText(/delivery time is required/i)
+    const cartValueError = container.querySelector('#cartValue-error')
+    const distanceError = container.querySelector('#distance-error')
+    const itemCountError = container.querySelector('#itemCount-error')
+    const timeError = container.querySelector('#time-error')
 
-    // // expect(cartValueError).toBeInTheDocument()
-    // expect(distanceError).toBeInTheDocument()
-    // expect(itemCountError).toBeInTheDocument()
-    // expect(timeError).toBeInTheDocument()
+    expect(cartValueError).toBeInTheDocument()
+    expect(distanceError).toBeInTheDocument()
+    expect(itemCountError).toBeInTheDocument()
+    expect(timeError).toBeInTheDocument()
   })
 
   test('test form correctly resets the input values and delivery fee when clear inputs buttton is clicked', () => {})

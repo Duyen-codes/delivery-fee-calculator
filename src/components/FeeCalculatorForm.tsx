@@ -79,7 +79,9 @@ const FeeCalculatorForm: React.FC = () => {
               id="cartValue"
             />
             <span className="input-group-text">€</span>
-            <div className="invalid-feedback">{errors.cartValue?.message}</div>
+            <div className="invalid-feedback" id="cartValue-error">
+              {errors.cartValue?.message}
+            </div>
           </div>
         </div>
 
@@ -101,7 +103,9 @@ const FeeCalculatorForm: React.FC = () => {
             />
             <span className="input-group-text">m</span>
 
-            <div className="invalid-feedback">{errors.distance?.message}</div>
+            <div className="invalid-feedback" id="distance-error">
+              {errors.distance?.message}
+            </div>
           </div>
         </div>
 
@@ -119,7 +123,9 @@ const FeeCalculatorForm: React.FC = () => {
             }`}
             placeholder="4"
           />
-          <div className="invalid-feedback">{errors.itemCount?.message}</div>
+          <div className="invalid-feedback" id="itemCount-error">
+            {errors.itemCount?.message}
+          </div>
         </div>
 
         <div className="form-group">
@@ -152,10 +158,15 @@ const FeeCalculatorForm: React.FC = () => {
             control={control}
             rules={{ required: true }}
           />
-
-          <div className="invalid-feedback" style={{ display: 'block' }}>
-            {errors.time?.message}
-          </div>
+          {errors && (
+            <div
+              className="invalid-feedback"
+              id="time-error"
+              style={{ display: 'block' }}
+            >
+              {errors.time?.message}
+            </div>
+          )}
         </div>
         <div className="row g-3 mb-3">
           <div className="col-auto">
