@@ -116,6 +116,11 @@ describe('FeeCalculatorForm', () => {
           fireEvent.click(clearButton)
         }
       })
+
+      expect(getByText(/Delivery fee: €0.00/i)).toBeInTheDocument()
+      await waitFor(() => {
+        expect(cartValueInput).toHaveValue('')
+      })
     })
   })
 })
