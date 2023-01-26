@@ -7,7 +7,6 @@ class OrderSurcharge {
   }
   calculate() {
     if (this.cartValue < 10) {
-      console.log('cartValue < 10')
       this.fee += 10 - this.cartValue
     }
     return this.fee

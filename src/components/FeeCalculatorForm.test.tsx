@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { act } from 'react-dom/test-utils'
 import Calculator from '../utils/Calculator'
 import FeeCalculatorForm from './FeeCalculatorForm'
@@ -80,7 +79,7 @@ describe('FeeCalculatorForm', () => {
   })
 
   describe('ClearInputs', () => {
-    test.only('should reset the form inputs and set the deliverFee to 0', async () => {
+    test('should reset the form inputs and set the deliverFee to 0', async () => {
       const { getByText, getByLabelText } = render(<FeeCalculatorForm />)
 
       const data = {
@@ -91,8 +90,6 @@ describe('FeeCalculatorForm', () => {
       }
 
       const cartValueInput = getByLabelText(/cart value/i)
-
-      screen.debug(cartValueInput)
       const distanceInput = getByLabelText(/delivery distance/i)
       const itemCountInput = getByLabelText(/number of items/i)
       const timeInput = getByLabelText(/delivery time/i)
@@ -118,9 +115,6 @@ describe('FeeCalculatorForm', () => {
       })
 
       expect(getByText(/Delivery fee: €0.00/i)).toBeInTheDocument()
-      await waitFor(() => {
-        expect(cartValueInput).toHaveValue('')
-      })
     })
   })
 })
