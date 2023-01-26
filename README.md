@@ -12,6 +12,8 @@ Here is a working live demo: [https://taupe-twilight-1f8214.netlify.app/](https:
 - [General info](#general-info)
 - [Technologies](#technologies)
 - [Installation](#installation)
+- [Testing](#testing)
+- [Sources](#sources)
 
 ## General info
 
