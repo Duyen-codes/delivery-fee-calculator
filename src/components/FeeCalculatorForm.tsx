@@ -25,8 +25,6 @@ const FeeCalculatorForm: React.FC = () => {
   })
 
   const onSubmit = (data: CalculateSubmitForm) => {
-    console.log('form submit')
-    console.log('data: ', data)
     const { cartValue, distance, itemCount, time } = data
     const dateTime = new Date(Number(time))
 
