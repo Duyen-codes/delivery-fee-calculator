@@ -54,4 +54,4 @@ CI=true npm test
 
 ## Sources
 
-Wolt summer 2023 Engineering internship pre-assigment:[https://github.com/woltapp/engineering-summer-intern-2023](https://github.com/woltapp/engineering-summer-intern-2023)
+Wolt summer 2023 Engineering internship preliminary assignment:[https://github.com/woltapp/engineering-summer-intern-2023](https://github.com/woltapp/engineering-summer-intern-2023)
