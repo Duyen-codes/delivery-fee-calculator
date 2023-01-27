@@ -9,15 +9,10 @@ Here is a working live demo: [https://taupe-twilight-1f8214.netlify.app/](https:
 
 ## Table of contents
 
-- [General info](#general-info)
 - [Technologies](#technologies)
 - [Installation](#installation)
 - [Testing](#testing)
 - [Sources](#sources)
-
-## General info
-
-A delivery fee calculator app which calculates a delivery fee based on user input and shows the calculated delivery fee to the user.
 
 ## Technologies
 
