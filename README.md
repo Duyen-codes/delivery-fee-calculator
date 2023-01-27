@@ -5,6 +5,7 @@ A web app using React and Typescript that calculates how much the delivery will 
 ## Demo
 
 Here is a working live demo: [https://taupe-twilight-1f8214.netlify.app/](https://taupe-twilight-1f8214.netlify.app/)
+
 ![App user interface](./images/app_UI.png)
 
 ## Table of contents
@@ -55,3 +56,5 @@ CI=true npm test
 ## Sources
 
 Wolt summer 2023 Engineering internship preliminary assignment:[https://github.com/woltapp/engineering-summer-intern-2023](https://github.com/woltapp/engineering-summer-intern-2023)
+
+## Final thoughts
