@@ -61,11 +61,13 @@ describe('FeeCalculatorForm', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  test('form displays validation error messages when the required fields are left empty', () => {
+  test('form displays validation error messages when the required fields are left empty', async () => {
     const { getByText, container } = render(<FeeCalculatorForm />)
 
     const calculateButton = getByText(/Calculate delivery price/i)
-    fireEvent.click(calculateButton)
+    await act(async () => {
+      fireEvent.click(calculateButton)
+    })
 
     const cartValueError = container.querySelector('#cartValue-error')
     const distanceError = container.querySelector('#distance-error')
