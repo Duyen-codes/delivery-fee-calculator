@@ -48,14 +48,9 @@ $ npm install
 $ npm start
 ```
 
-### Simple build for production
-
-```shell
-$ npm run build
-```
-
 ## Testing
 
+All test files are placed in the same directory as the component being tested.
 Run test normally with the command:
 
 ```shell
