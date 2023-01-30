@@ -8,6 +8,10 @@ Here is a working live demo: [https://taupe-twilight-1f8214.netlify.app/](https:
 
 ![App user interface](./images/app_UI.png)
 
+If any of the input fields are left empty when form is submitted, input fields validation errors' messages are displayed:
+
+![Validation errors UI](./images/error_UI.png)
+
 ## Table of contents
 
 - [Technologies](#technologies)
