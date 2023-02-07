@@ -1,6 +1,7 @@
 import Calculator from './Calculator'
 
 describe('Calculator', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let calculator: any
   beforeEach(() => {
     calculator = new Calculator(20, 1500, 8, new Date('2023-01-24T11:00:00Z')) //cartValue, distance, itemCount, time
